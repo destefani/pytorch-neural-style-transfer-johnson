@@ -111,35 +111,39 @@ def train(training_config):
 
 if __name__ == "__main__":
     #
-    # Fixed args - don't change these unless you have a good reason
-    #
-    dataset_path = os.path.join(os.path.dirname(__file__), 'data', 'mscoco')
-    style_images_path = os.path.join(os.path.dirname(__file__), 'data', 'style-images')
-    model_binaries_path = os.path.join(os.path.dirname(__file__), 'models', 'binaries')
-    checkpoints_root_path = os.path.join(os.path.dirname(__file__), 'models', 'checkpoints')
-    image_size = 256  # training images from MS COCO are resized to image_size x image_size
-    batch_size = 4
-
-    assert os.path.exists(dataset_path), f'MS COCO missing. Download the dataset using resource_downloader.py script.'
-    os.makedirs(model_binaries_path, exist_ok=True)
-
-    #
     # Modifiable args - feel free to play with these (only a small subset is exposed by design to avoid cluttering)
     #
     parser = argparse.ArgumentParser()
     # training related
-    parser.add_argument("--style_img_name", type=str, help="style image name that will be used for training", default='edtaonisl.jpg')
+    parser.add_argument("--style_img_name", type=str, help="style image name that will be used for training", default='image_0.jpeg')
     parser.add_argument("--content_weight", type=float, help="weight factor for content loss", default=1e0)  # you don't need to change this one just play with style loss
-    parser.add_argument("--style_weight", type=float, help="weight factor for style loss", default=4e5)
+    parser.add_argument("--style_weight", type=float, help="weight factor for style loss", default=6e5)
     parser.add_argument("--tv_weight", type=float, help="weight factor for total variation loss", default=0)
     parser.add_argument("--num_of_epochs", type=int, help="number of training epochs ", default=2)
     parser.add_argument("--subset_size", type=int, help="number of MS COCO images (NOT BATCHES) to use, default is all (~83k)(specified by None)", default=None)
+    parser.add_argument("--dataset", type=str, help="training dataset path", default='mscoco')
     # logging/debugging/checkpoint related (helps a lot with experimentation)
     parser.add_argument("--enable_tensorboard", type=bool, help="enable tensorboard logging (scalars + images)", default=True)
     parser.add_argument("--image_log_freq", type=int, help="tensorboard image logging (batch) frequency - enable_tensorboard must be True to use", default=100)
     parser.add_argument("--console_log_freq", type=int, help="logging to output console (batch) frequency", default=500)
     parser.add_argument("--checkpoint_freq", type=int, help="checkpoint model saving (batch) frequency", default=2000)
+    # TODO: training variables
     args = parser.parse_args()
+
+    #
+    # Fixed args - don't change these unless you have a good reason
+    #
+    dataset_path = os.path.join(os.path.dirname(__file__), 'data', args.dataset)
+    style_images_path = os.path.join(os.path.dirname(__file__), 'data', 'style-images')
+    model_binaries_path = os.path.join(os.path.dirname(__file__), 'models', 'binaries')
+    checkpoints_root_path = os.path.join(os.path.dirname(__file__), 'models', 'checkpoints')
+    image_size = 256  # training images from MS COCO are resized to image_size x image_size
+    batch_size = 8
+
+    assert os.path.exists(dataset_path), f'MS COCO missing. Download the dataset using resource_downloader.py script.'
+    os.makedirs(model_binaries_path, exist_ok=True)
+
+    #-------------------------------------------------------------------------------------------------------------------
 
     checkpoints_path = os.path.join(checkpoints_root_path, args.style_img_name.split('.')[0])
     if args.checkpoint_freq is not None:
