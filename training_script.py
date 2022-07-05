@@ -115,13 +115,13 @@ if __name__ == "__main__":
     #
     parser = argparse.ArgumentParser()
     # training related
-    parser.add_argument("--style_img_name", type=str, help="style image name that will be used for training", default='image_0.jpeg')
+    parser.add_argument("--style_img_name", type=str, help="style image name that will be used for training", default='image_1.jpeg')
     parser.add_argument("--content_weight", type=float, help="weight factor for content loss", default=1e0)  # you don't need to change this one just play with style loss
-    parser.add_argument("--style_weight", type=float, help="weight factor for style loss", default=6e5)
+    parser.add_argument("--style_weight", type=float, help="weight factor for style loss", default=3e5)
     parser.add_argument("--tv_weight", type=float, help="weight factor for total variation loss", default=0)
-    parser.add_argument("--num_of_epochs", type=int, help="number of training epochs ", default=2)
+    parser.add_argument("--num_of_epochs", type=int, help="number of training epochs ", default=300)
     parser.add_argument("--subset_size", type=int, help="number of MS COCO images (NOT BATCHES) to use, default is all (~83k)(specified by None)", default=None)
-    parser.add_argument("--dataset", type=str, help="training dataset path", default='mscoco')
+    parser.add_argument("--dataset", type=str, help="training dataset path", default='vulvas')
     # logging/debugging/checkpoint related (helps a lot with experimentation)
     parser.add_argument("--enable_tensorboard", type=bool, help="enable tensorboard logging (scalars + images)", default=True)
     parser.add_argument("--image_log_freq", type=int, help="tensorboard image logging (batch) frequency - enable_tensorboard must be True to use", default=100)
