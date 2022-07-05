@@ -48,7 +48,7 @@ def stylize_static_image(inference_config):
             content_img_path = os.path.join(inference_config['content_images_path'], inference_config['content_input'])
             content_image = utils.prepare_img(content_img_path, inference_config['img_width'], device)
             stylized_img = stylization_model(content_image).to('cpu').numpy()[0]
-            utils.save_and_maybe_display_image(inference_config, stylized_img, should_display=inference_config['should_not_display'])
+            utils.save_and_maybe_display_image(inference_config, stylized_img, should_display=inference_config['should_display'])
 
 
 if __name__ == "__main__":
@@ -67,14 +67,14 @@ if __name__ == "__main__":
     #
     parser = argparse.ArgumentParser()
     # Put image name or directory containing images (if you'd like to do a batch stylization on all those images)
-    parser.add_argument("--content_input", type=str, help="Content image(s) to stylize", default='taj_mahal.jpg')
+    parser.add_argument("--content_input", type=str, help="Content image(s) to stylize", default='vulva 4.png')
     parser.add_argument("--batch_size", type=int, help="Batch size used only if you set content_input to a directory", default=5)
-    parser.add_argument("--img_width", type=int, help="Resize content image to this width", default=500)
-    parser.add_argument("--model_name", type=str, help="Model binary to use for stylization", default='mosaic_4e5_e2.pth')
+    parser.add_argument("--img_width", type=int, help="Resize content image to this width", default=1024)
+    parser.add_argument("--model_name", type=str, help="Model binary to use for stylization", default='/home/im/code/pytorch-neural-style-transfer-johnson/models/checkpoints/image_1/ckpt_style_image_1_cw_1.0_sw_700000.0_tw_0_epoch_1_batch_5999.pth')
 
     # Less frequently used arguments
-    parser.add_argument("--should_not_display", action='store_false', help="Should display the stylized result")
-    parser.add_argument("--verbose", action='store_true', help="Print model metadata (how the model was trained) and where the resulting stylized image was saved")
+    parser.add_argument("--should_display", action='store_false', help="Should display the stylized result", default=False)
+    parser.add_argument("--verbose", action='store_true', help="Print model metadata (how the model was trained) and where the resulting stylized image was saved", default=True)
     parser.add_argument("--redirected_output", type=str, help="Overwrite default output dir. Useful when this project is used as a submodule", default=None)
     args = parser.parse_args()
 
